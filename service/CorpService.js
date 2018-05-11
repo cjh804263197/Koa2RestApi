@@ -11,15 +11,35 @@ let saveCorp =  async params => {
 }
 /**
  * 删除企业
- * @param {*} params 
+ * @param {*} params {id: xxxxxx} 参数
  */
 let destoryCorp = async params => {
-    var corp = await Corp.findOne({
+    let corp = await Corp.findOne({
         'where': params
     })
     if (corp === null) { throw new APIError('delete:not_found', 'this corp has not found!') }
     let res = await corp.destroy()
     return res
+}
+
+/**
+ * 获取单个企业信息通过id
+ * @param {*} params {id: xxx} 参数
+ */
+let getCorp = async params => {
+    if (!params['id']) {
+        throw new APIError('param:error', 'param should include id!')
+    }
+    let corp = await Corp.findById(params['id'])
+    return corp
+}
+
+/**
+ * 分页查询企业信息通过条件
+ * @param {*} params 
+ */
+let queryCorp = async params => {
+
 }
 
 module.exports = {

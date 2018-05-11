@@ -46,7 +46,11 @@ server.use(async (ctx, next) => {
     if (ctx.session.user === undefined && ctx.request.url.indexOf('/login') === -1) {
         throw new APIError('auth:unauthorized', 'you should to login!')
     } else {
-        await next()
+        if (ctx.request.method === 'POST' && ctx.request.params === {}) {
+            throw new APIError('param:null', 'param should not null!')
+        } else {
+            await next()
+        }
     }
 })
 
