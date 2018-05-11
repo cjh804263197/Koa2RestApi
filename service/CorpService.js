@@ -1,5 +1,6 @@
 const Corp = require('../model/corp')
 const {APIError} = require('../rest')
+const {queryConditionParser} = require('../common/util')
 
 /**
  * 保存企业 (若params中带有id,则为修改，否则为添加)
@@ -35,14 +36,18 @@ let getCorp = async params => {
 }
 
 /**
- * 分页查询企业信息通过条件
- * @param {*} params 
+ * 查询企业信息通过条件
+ * @param {*} params 请求参数
  */
 let queryCorp = async params => {
-
+    let condition = queryConditionParser(params, ['status', 'kind', 'aptitudeKind', 'like%title'])
+    let result = await Corp.findAndCountAll(condition)
+    return result
 }
 
 module.exports = {
     saveCorp,
-    destoryCorp
+    destoryCorp,
+    getCorp,
+    queryCorp
 }
