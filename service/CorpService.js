@@ -40,7 +40,7 @@ let getCorp = async params => {
  * @param {*} params 请求参数
  */
 let queryCorp = async params => {
-    let condition = queryConditionParser(params, ['status', 'kind', 'aptitudeKind', 'like%title'])
+    let condition = queryConditionParser(params)
     let result = await Corp.findAndCountAll(condition)
     return result
 }

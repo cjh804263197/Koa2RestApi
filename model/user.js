@@ -24,7 +24,11 @@ const User = sequelize.define('user', {
     },
     corpId: {
         type: Sequelize.STRING(36),
-        allowNull: false
+        allowNull: false,
+        references: {
+            model: 'corp',
+            key: 'id'
+        }
     }
 },{
     timestamps: false // 防止sequelize自动加入createdAt、updatedAt字段

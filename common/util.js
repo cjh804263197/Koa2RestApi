@@ -24,16 +24,16 @@ let formDataParser = obj => {
  * @param {*} params 请求参数
  * @param {*} fields 所要查询条件的字段
  */
-let queryConditionParser = (params, fields=[]) => {
+let queryConditionParser = (params) => {
     let condition = {}
-    fields.forEach(field => {
-        if (field.startsWith('like%')) {
-            field = field.replace('like%', '')
-            condition = params[field] === undefined ? {...condition} : {...condition, [field]: {'$like': `%${params[field]}%`}}
+    for (let key in params) {
+        if (key.startsWith('like%')) {
+            let field = key.replace('like%', '')
+            condition = (params[key] === undefined || params[key] === '' || params[key] === null) ? {...condition} : {...condition, [field]: {'$like': `%${params[key]}%`}}
         } else {
-            condition = params[field] === undefined ? {...condition} : {...condition, [field]: params[field]}
+            condition = params[key] === undefined ? {...condition} : {...condition, [key]: params[key]}
         }
-    })
+    }
     let opt = { where: condition }
     if (params.limit !== undefined && params.currentPage !== undefined) {
         opt.limit = params['limit'],
