@@ -1,4 +1,4 @@
-const User = require('../model/user')
+const {CorpUser, Corp} = require('../model')
 const encrypt = require('../common/encrypt')
 const {APIError} = require('../rest')
 
@@ -6,23 +6,16 @@ const formParse = require('../upload')
 
 const {formDataParser} = require('../common/util')
 
-var fn_get_login = async (ctx, next) => {
-    ctx.response.body = `<h1>Index</h1>
-        <form action="/api/login" method="post">
-            <p>Name: <input name="username" value="chen"></p>
-            <p>Password: <input name="password" type="password"></p>
-            <p><input type="submit" value="Submit"></p>
-        </form>`
-}
-
-var fn_post_login = async (ctx, next) => {
+/**
+ * 企业用户登录
+ */
+var corp_user_login = async (ctx, next) => {
     let username = ctx.request.body.username
     let password = encrypt.md5(ctx.request.body.password)
     console.log(`signin with name: ${username}, password: ${password}`)
-
-    console.log(`User: ${JSON.stringify(User)}`)
     
-    let users = await User.findAll({
+    let users = await CorpUser.findAll({
+        include: [{association: CorpUser.belongsTo(Corp, {foreignKey:'corpId'})}],
         where: {
             username: username
         }
@@ -47,17 +40,6 @@ var fn_post_login = async (ctx, next) => {
     }
 }
 
-var test_get_upload = async (ctx, next) => {
-    ctx.response.body = `<h1>Index</h1>
-        <form action="/api/upload" method="post" enctype="multipart/form-data">
-            <p>Name: <input type="text" name="name"></p>
-            <p>Age: <input type="text" name="age"></p>
-            <p>Select File: <input type="file" name="file1"></p>
-            <p>Select File: <input type="file" name="file2"></p>
-            <p><input type="submit" value="sumbit"></p>
-        </form>`
-}
-
 var test_post_upload = async (ctx, next) => {
     let obj = await formParse(ctx)
     console.log(`obj=${JSON.stringify(obj)}`)
@@ -67,8 +49,5 @@ var test_post_upload = async (ctx, next) => {
 }
 
 module.exports = {
-    'GET /login': fn_get_login,
-    'POST /login': fn_post_login,
-    'GET /upload': test_get_upload,
-    'POST /upload': test_post_upload
+    'POST /corp/user/login': corp_user_login
 }

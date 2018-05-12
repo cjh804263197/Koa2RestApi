@@ -34,6 +34,5 @@ var sequelize = new Sequelize('LaborManage', 'root', 'root', { // 从左到右�
   
   module.exports = {
       sequelize,
-      id,
-      createdAt
+      Sequelize
     }

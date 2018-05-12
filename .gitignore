@@ -6,6 +6,9 @@ yarn-debug.log*
 yarn-error.log*
 .Ds_Store
 
+# UploadFiles
+static/upload/
+
 # Runtime data
 pids
 *.pid

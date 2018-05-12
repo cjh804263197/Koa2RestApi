@@ -1,4 +1,4 @@
-const Corp = require('../model/corp')
+const {Corp} = require('../model')
 const {APIError} = require('../rest')
 const {queryConditionParser} = require('../common/util')
 
@@ -6,7 +6,17 @@ const {queryConditionParser} = require('../common/util')
  * 保存企业 (若params中带有id,则为修改，否则为添加)
  */
 let saveCorp =  async params => {
-    let corp = Corp.build(params)
+    let corp = null
+    if (params.id !== undefined && params.id !== null) {
+        corp = await Corp.findById(params.id)
+        for (let key in params) {
+            if (key !== 'id') {
+                corp[key] = params[key]
+            }
+        }
+    } else {
+        corp = Corp.build(params)
+    }
     corp = await corp.save()
     return corp
 }

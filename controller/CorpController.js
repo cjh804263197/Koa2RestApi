@@ -1,4 +1,4 @@
-const {APIError, APIResObj} = require('../rest')
+const {APIError} = require('../rest')
 
 const formParse = require('../upload')
 
