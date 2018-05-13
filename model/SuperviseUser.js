@@ -2,7 +2,7 @@
 const uuid = require('node-uuid')
 
 module.exports = (sequelize, DataTypes) => {
-    return sequelize.define('CorpUser', {
+    return sequelize.define('SuperviseUser', {
         id: {
             type: DataTypes.STRING(36),
             defaultValue: uuid.v4, // 使用uuid生成全球唯一识别码当做主键值
@@ -25,15 +25,15 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
             comment: '职位'
         },
-        corpId: {
+        department: {
             type: DataTypes.STRING(36),
             allowNull: false,
-            comment: '所属企业'
+            comment: '所属部门'
         }
     }, 
     {
         timestamps: false, // 防止sequelize自动加入createdAt、updatedAt字段
-        comment: '企业用户表',
+        comment: '监督部门用户表',
         charset: 'utf8',
         collate: 'utf8_general_ci'
     })

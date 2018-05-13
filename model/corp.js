@@ -2,7 +2,6 @@
 const uuid = require('node-uuid')
 
 module.exports = (sequelize, DataTypes) => {
-    // User实体类的定义与数据库中的users表关联
     return sequelize.define('Corp', {
         id: {
             type: DataTypes.STRING(36),
