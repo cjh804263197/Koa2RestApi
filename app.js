@@ -12,8 +12,28 @@ const {restify, APIError} = require('./rest')
 let serve = require('koa-static')
 const mount = require('koa-mount')
 
+// 解决跨域请求问题
+const cors = require('koa2-cors')
+
 // 创建一个server对象
 let server = new Koa()
+
+
+server.use(cors({
+    origin: function (ctx) {
+        if (ctx.url === '/test') {
+            return false
+        }
+        return 'http://localhost:8080'
+        // return '*'
+    },
+    exposeHeaders: ['WWW-Authenticate', 'Server-Authorization'],
+    maxAge: 5,
+    credentials: true,
+    'Access-Control-Allow-Credentials':true,
+    allowMethods: ['GET', 'POST', 'DELETE'],
+    allowHeaders: ['Content-Type', 'Authorization', 'Accept'],
+}))
 
 // 循环组件keys,防止session被破解
 let keys = []
@@ -59,5 +79,5 @@ server.use(mount('/api', controller()))
 // 当访问路径中带有/static时，则走该默认文件获取方法
 server.use(mount('/static', serve(__dirname + '/static'), { extensions: ['html', 'txt', 'jpg', 'png']}))
 
-// 设置server服务器监听8080端口
-server.listen(8080)
+// 设置server服务器监听8090端口
+server.listen(8090)

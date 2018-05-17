@@ -43,3 +43,17 @@ module.exports = {
     'POST /corp/get': fn_post_get,
     'POST /corp/query': fn_post_query
 }
+
+// response拦截器
+service.interceptors.response.use(
+    response => {
+      // 数据响应之后，要做的业务
+      return response
+    },
+    error => {
+      return Promise.reject(error)
+    }
+  )
+  
+export default service
+  

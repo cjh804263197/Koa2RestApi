@@ -11,7 +11,7 @@ const {formDataParser} = require('../common/util')
  */
 var corp_user_login = async (ctx, next) => {
     let username = ctx.request.body.username
-    let password = encrypt.md5(ctx.request.body.password)
+    let password = ctx.request.body.password
     console.log(`signin with name: ${username}, password: ${password}`)
     
     let users = await CorpUser.findAll({
@@ -45,7 +45,7 @@ var corp_user_login = async (ctx, next) => {
  */
 var supervise_user_login = async (ctx, next) => {
     let username = ctx.request.body.username
-    let password = encrypt.md5(ctx.request.body.password)
+    let password = ctx.request.body.password
     console.log(`signin with name: ${username}, password: ${password}`)
     
     let users = await SuperviseUser.findAll({
