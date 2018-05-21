@@ -9,11 +9,16 @@ module.exports = (sequelize, DataTypes) => {
             primaryKey: true,
             comment: '主键'
         },
+        name: {
+            type: DataTypes.STRING(20),
+            allowNull: false,
+            comment: '姓名'
+        },
         username: {
             type: DataTypes.STRING(20),
             allowNull: false,
             unique: true, // 唯一性约束
-            comment: '用户名'
+            comment: '账号'
         },
         password: {
             type: DataTypes.STRING(32),

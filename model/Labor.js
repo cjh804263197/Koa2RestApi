@@ -39,6 +39,16 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
             comment: '身份证号'
         },
+        bankCardNum: {
+            type: DataTypes.STRING(19),
+            allowNull: false,
+            comment: '银行卡号'
+        },
+        attendCardNum: {
+            type: DataTypes.STRING(30),
+            allowNull: false,
+            comment: '考勤卡号'
+        },
         entryDate: {
             type: DataTypes.DATE,
             defaultValue: DataTypes.NOW,

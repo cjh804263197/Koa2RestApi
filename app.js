@@ -19,7 +19,7 @@ const cors = require('koa2-cors')
 let server = new Koa()
 
 
-server.use(cors({
+server.use(cors({ // 解决js跨域请求问题
     origin: function (ctx) {
         if (ctx.url === '/test') {
             return false

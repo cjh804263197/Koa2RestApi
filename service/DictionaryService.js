@@ -37,7 +37,7 @@ let destoryDictionary = async params => {
  * 获取单个数据字典对象
  * @param {*} params 
  */
-let getDicionary = async params => {
+let getDictionary = async params => {
     if (!params['id']) {
         throw new APIError('param:error', 'param should include id!')
     }
@@ -50,6 +50,7 @@ let getDicionary = async params => {
  * @param {*} param 
  */
 let queryDictionary = async params => {
+    console.log(`params=${JSON.stringify(params)}`)
     let condition = queryConditionParser(params)
     let result = await Dictionary.findAndCountAll(condition)
     return result
@@ -58,6 +59,6 @@ let queryDictionary = async params => {
 module.exports = {
     saveDictionary,
     destoryDictionary,
-    getDicionary,
+    getDictionary,
     queryDictionary
 }

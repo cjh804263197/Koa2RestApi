@@ -41,6 +41,7 @@ let queryConditionParser = (params) => {
         opt.limit = params['limit'],
         opt.offset = (params['currentPage'] - 1) * params['limit']
     }
+    console.log(`opt=${JSON.stringify(opt)}`)
     return opt
 }
 
