@@ -9,6 +9,11 @@ module.exports = (sequelize, DataTypes) => {
             primaryKey: true,
             comment: '主键'
         },
+        status: { // 企业状态
+            type: DataTypes.STRING(36),
+            allowNull: false,
+            comment: '项目状态'
+        },
         buildCorpId: {
             type: DataTypes.STRING(36),
             allowNull: false,

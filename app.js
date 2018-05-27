@@ -24,7 +24,7 @@ server.use(cors({ // 解决js跨域请求问题
         if (ctx.url === '/test') {
             return false
         }
-        return 'http://localhost:8080'
+        return 'http://localhost:8082'
         // return '*'
     },
     exposeHeaders: ['WWW-Authenticate', 'Server-Authorization'],

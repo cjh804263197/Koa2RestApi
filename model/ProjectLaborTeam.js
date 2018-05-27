@@ -12,13 +12,19 @@ module.exports = (sequelize, DataTypes) => {
         projectId: {
             type: DataTypes.STRING(36),
             allowNull: false,
-            unique: 'pro_labteam', // 创建projectId laborTeamId字段联合唯一索引，保证一个项目该劳务队只能有一次分配关系
+            unique: 'pro_labteam', // 创建projectId laborCorpId laborTeamId字段联合唯一索引，保证一个项目该劳务队只能有一次分配关系
             comment: '项目Id'
+        },
+        laborCorpId: {
+            type: DataTypes.STRING(36),
+            allowNull: false,
+            unique: 'pro_labteam', // 创建projectId laborCorpId laborTeamId字段联合唯一索引，保证一个项目该劳务队只能有一次分配关系
+            comment: '劳务公司Id'
         },
         laborTeamId: {
             type: DataTypes.STRING(36),
             allowNull: false,
-            unique: 'pro_labteam', // 创建projectId laborTeamId字段联合唯一索引，保证一个项目该劳务队只能有一次分配关系
+            unique: 'pro_labteam', // 创建projectId laborCorpId laborTeamId字段联合唯一索引，保证一个项目该劳务队只能有一次分配关系
             comment: '劳务队Id'
         },
         effectiveDate: {

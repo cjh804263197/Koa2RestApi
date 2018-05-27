@@ -4,7 +4,7 @@ const formParse = require('../upload')
 
 const {formDataParser} = require('../common/util')
 
-const {saveProject, destoryProject, getProject, queryProject, saveProjectLaborTeam, queryProjectLaborTeam} = require('../service/ProjectService')
+const {saveProject, destoryProject, getProject, queryProject, saveProjectLaborTeam, getProjectLaborTeam, queryProjectLaborTeam} = require('../service/ProjectService')
 
 var fn_post_save = async (ctx, next) => {
     let project = await saveProject(ctx.request.body)
@@ -25,7 +25,7 @@ var fn_post_get = async (ctx, next) => {
     if (project) {
         ctx.rest(project)
     } else {
-        throw new APIError('get:no_found', 'the corp is not found')
+        throw new APIError('get:no_found', 'the project is not found')
     }
 }
 
@@ -42,6 +42,14 @@ var fn_post_teamlabor_save = async (ctx, next) => {
         throw new APIError('save:faile', 'the project is save faile')
     }
 }
+var fn_post_teamlabor_get = async (ctx, next) => {
+    let proLabTeam = await getProjectLaborTeam(ctx.request.body)
+    if (proLabTeam) {
+        ctx.rest(proLabTeam)
+    } else {
+        throw new APIError('get:no_found', 'the projectLaborTeam is not found')
+    }
+}
 
 var fn_post_teamlabor_query = async (ctx, next) => {
     let res = await queryProjectLaborTeam(ctx.request.body)
@@ -54,5 +62,6 @@ module.exports = {
     'POST /project/get': fn_post_get,
     'POST /project/query': fn_post_query,
     'POST /project/laborteam/save': fn_post_teamlabor_save,
+    'POST /project/laborteam/get': fn_post_teamlabor_get,
     'POST /project/laborteam/query': fn_post_teamlabor_query
 }

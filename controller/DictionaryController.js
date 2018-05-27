@@ -8,7 +8,7 @@ const {saveDictionary, destoryDictionary, getDictionary, queryDictionary} = requ
 
 var fn_post_save = async (ctx, next) => {
     let dictionary = await saveDictionary(ctx.request.body)
-    if (dictionary) { // 若有user,则表示保存成功,返回id
+    if (dictionary) { // 若有dic,则表示保存成功,返回id
         ctx.rest({id: dictionary.id})
     } else { // 否则表示失败，抛出失败的异常
         throw new APIError('save:faile', 'the dictionary is save faile')

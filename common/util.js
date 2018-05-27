@@ -22,17 +22,16 @@ let formDataParser = obj => {
 /**
  * 通过传入字段，自动加工为查询条件,若所指定的查询字段在请求参数中为undefined，在查询条件中没有该字段的查询条件
  * @param {*} params 请求参数
- * @param {*} fields 所要查询条件的字段
  */
 let queryConditionParser = (params) => {
     let condition = {}
     for (let key in params) {
-        if (key !== 'limit' && key !== 'currentPage') {
+        if (key !== 'limit' && key !== 'currentPage' && key.indexOf('.') === -1) {
             if (key.startsWith('like%')) {
                 let field = key.replace('like%', '')
                 condition = (params[key] === undefined || params[key] === '' || params[key] === null) ? {...condition} : {...condition, [field]: {'$like': `%${params[key]}%`}}
             } else {
-                condition = params[key] === undefined ? {...condition} : {...condition, [key]: params[key]}
+                condition = (params[key] === undefined || params[key] === '' || params[key] === null) ? {...condition} : {...condition, [key]: params[key]}
             }
         }
     }
@@ -45,7 +44,26 @@ let queryConditionParser = (params) => {
     return opt
 }
 
+/**
+ * 通过传入字段，自动加工为子查询的条件，若所指定的查询字段在请求参数中为undefined，在查询条件中没有该字段的查询条件
+ * @param {*} params 请求参数
+ * @param {*} alias 子查询的表名(别名)
+ */
+let queryChildConditionParser = (params, alias) => {
+    let condition = {}
+    for (let key in params) {
+        if (key.indexOf('.') !== -1) { // 当key中带有.时，则表明该字段为子查询条件
+            if (params[key] !== undefined && params[key] !== '' && params[key] !== null) {
+                let subKeys = key.split('.')
+                condition = {...condition, [subKeys[subKeys.length-1]]: params[key]}
+            }
+        }
+    }
+    return condition
+}
+
 module.exports = {
     formDataParser,
-    queryConditionParser
+    queryConditionParser,
+    queryChildConditionParser
 }

@@ -1,6 +1,6 @@
 const {Project, Corp, ProjectLaborTeam, LaborTeam} = require('../model')
 const {APIError} = require('../rest')
-const {queryConditionParser} = require('../common/util')
+const {queryConditionParser, queryChildConditionParser} = require('../common/util')
 
 /**
  * 保存项目 (若params中带有id,则为修改，否则为添加)
@@ -53,8 +53,8 @@ let queryProject = async params => {
     let condition = queryConditionParser(params)
     let result = await Project.findAndCountAll({
         include: [
-            {association: Project.belongsTo(Corp, {foreignKey:'buildCorpId', as:'BuildCorp'})},
-            {association: Project.belongsTo(Corp, {foreignKey:'constructCorpId', as:'ConstructCorp'})}
+            {association: Project.belongsTo(Corp, {foreignKey:'buildCorpId', as:'BuildCorps'})},
+            {association: Project.belongsTo(Corp, {foreignKey:'constructCorpId', as:'ConstructCorps'})}
         ],
         ...condition
     })
@@ -82,15 +82,34 @@ let saveProjectLaborTeam = async params => {
 }
 
 /**
+ * 获取单个项目劳务队关系通过id
+ * @param {*} params {id: xxx} 参数
+ */
+let getProjectLaborTeam = async params => {
+    if (!params['id']) {
+        throw new APIError('param:error', 'param should include id!')
+    }
+    let proLabTeam = await ProjectLaborTeam.findById(params['id'])
+    return proLabTeam
+}
+
+/**
  * 查询项目与劳务队分配关系列表通过条件
  * @param {*} params 请求参数
  */
 let queryProjectLaborTeam = async params => {
     let condition = queryConditionParser(params)
+    let childCondition = queryChildConditionParser(params, 'Project')
+    console.log(`childCondition=${JSON.stringify(childCondition)}`)
     let result = await ProjectLaborTeam.findAndCountAll({
         include: [
-            {association: ProjectLaborTeam.belongsTo(Project, {foreignKey:'projectId'})},
-            {association: ProjectLaborTeam.belongsTo(LaborTeam, {foreignKey:'laborTeamId'})}
+            {
+                association: ProjectLaborTeam.belongsTo(Project, {foreignKey:'projectId', as:'Project'}),
+                where: childCondition,
+                required: true // 当require为true时自动转化为inner join,默认false时是left outer join
+            },
+            {association: ProjectLaborTeam.belongsTo(Corp, {foreignKey:'laborCorpId', as:'LaborCorp'})},
+            {association: ProjectLaborTeam.belongsTo(LaborTeam, {foreignKey:'laborTeamId', as:'LaborTeam'})}
         ],
         ...condition
     })
