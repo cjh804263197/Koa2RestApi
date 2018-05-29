@@ -53,8 +53,9 @@ let querySalary = async params => {
     let condition = queryConditionParser(params)
     let result = await Salary.findAndCountAll({
         include: [
-            {association: Salary.belongsTo(Project, {foreignKey:'projectId'})},
-            {association: Salary.belongsTo(Labor, {foreignKey:'laborId'})}
+            {association: Salary.belongsTo(Project, {foreignKey:'projectId', as: 'Project'})},
+            {association: Salary.belongsTo(LaborTeam, {foreignKey:'laborTeamId', as: 'LaborTeam'})},
+            {association: Salary.belongsTo(Labor, {foreignKey:'laborId', as: 'Labor'})}
         ],
         ...condition
     })
@@ -82,6 +83,7 @@ let createSalaryByProLabTeam = async params => {
         let salary = {
             projectId: project.id,
             laborId: labor.id,
+            laborTeamId: labor.laborTeamId,
             year: params['year'],
             month: params['month'],
             standardAttendDay: 0,
@@ -93,7 +95,14 @@ let createSalaryByProLabTeam = async params => {
     })
     // 批量插入
     let res = await Salary.bulkCreate(salarys)
-    return res
+    let results = res.map(sala => {
+        let labs = labors.filter(lab => {
+            return lab.id === sala.laborId
+        })
+        let salaJson = JSON.parse(JSON.stringify(sala))
+        return {...salaJson, laborName: labs[0].name}
+    })
+    return results
 }
 
 // ToDo: 根据工资记录来生成.txt文件

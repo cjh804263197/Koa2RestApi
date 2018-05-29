@@ -36,7 +36,7 @@ var fn_post_query = async (ctx, next) => {
 
 var fn_post_createSalaryByProLabTeam = async (ctx, next) => {
     let res = await createSalaryByProLabTeam(ctx.request.body)
-    if (!res) { // 若有proLabTeam,则表示保存成功,返回id
+    if (res) { // 若有proLabTeam,则表示保存成功,返回id
         ctx.rest(res)
     } else { // 否则表示失败，抛出失败的异常
         throw new APIError('create:faile', 'the salary is create faile')
