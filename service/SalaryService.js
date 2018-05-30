@@ -1,6 +1,7 @@
-const {Labor, Project, Salary} = require('../model')
+const {Labor, Project, Salary, LaborTeam} = require('../model')
 const {APIError} = require('../rest')
-const {queryConditionParser} = require('../common/util')
+const {queryConditionParser, queryChildConditionParser} = require('../common/util')
+const fs = require('fs')
 
 /**
  * 保存工资信息 (若params中带有id,则为修改，否则为添加)
@@ -51,10 +52,15 @@ let getSalary = async params => {
  */
 let querySalary = async params => {
     let condition = queryConditionParser(params)
+    let childCondition = queryChildConditionParser(params, 'LaborTeam')
     let result = await Salary.findAndCountAll({
         include: [
             {association: Salary.belongsTo(Project, {foreignKey:'projectId', as: 'Project'})},
-            {association: Salary.belongsTo(LaborTeam, {foreignKey:'laborTeamId', as: 'LaborTeam'})},
+            {
+                association: Salary.belongsTo(LaborTeam, {foreignKey:'laborTeamId', as: 'LaborTeam'}),
+                where: childCondition,
+                required: true
+            },
             {association: Salary.belongsTo(Labor, {foreignKey:'laborId', as: 'Labor'})}
         ],
         ...condition
@@ -105,12 +111,34 @@ let createSalaryByProLabTeam = async params => {
     return results
 }
 
-// ToDo: 根据工资记录来生成.txt文件
+/**
+ * 读取文件中的数据，并将发放状态回写到工资表中
+ * @param {*} path 
+ */
+let readReportFileToSalary = async (path) => {
+    let space = ' '
+    let enter = '\r\n'
+    let content = fs.readFileSync(path, 'utf-8') // 读取结算报告文件中的内容
+    let datas = content.split(enter)
+    let results = []
+    datas.forEach(data => {
+        let fildes = data.split(space)
+        if (parseInt(fildes[7])) {
+            results.push(fildes[6])
+        }
+    })
+    // 批量更新
+    let affectRows = await Salary.update( {status: '已发放'}, {
+            where: { id: results }
+    })
+    return affectRows
+}
 
 module.exports = {
     saveSalary,
     destorySalary,
     getSalary,
     querySalary,
-    createSalaryByProLabTeam
+    createSalaryByProLabTeam,
+    readReportFileToSalary
 }

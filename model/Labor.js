@@ -9,6 +9,11 @@ module.exports = (sequelize, DataTypes) => {
             primaryKey: true,
             comment: '主键'
         },
+        corpId: {
+            type: DataTypes.STRING(36),
+            allowNull: false,
+            comment: '所属劳务公司id'
+        },
         laborTeamId: {
             type: DataTypes.STRING(36),
             allowNull: false,

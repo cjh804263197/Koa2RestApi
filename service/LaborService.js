@@ -54,7 +54,7 @@ let queryLabor = async params => {
     let result = await Labor.findAndCountAll({
         include: [
             {association: Labor.belongsTo(LaborTeam, {foreignKey:'laborTeamId'})},
-            {association: LaborTeam.belongsTo(Corp, {foreignKey:'corpId'})}
+            {association: Labor.belongsTo(Corp, {foreignKey:'corpId'})}
         ],
         ...condition
     })

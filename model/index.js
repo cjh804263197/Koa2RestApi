@@ -9,11 +9,13 @@ let Project = sequelize.import('./Project.js')
 let ProjectLaborTeam = sequelize.import('./ProjectLaborTeam.js')
 let Salary = sequelize.import('./Salary.js')
 let SuperviseUser = sequelize.import('./SuperviseUser.js')
+let SettleFile = sequelize.import('./SettleFile.js')
 
 // 同步模型到数据库中
 sequelize.sync()
 
 module.exports = {
+    sequelize,
     CorpUser,
     Corp,
     Dictionary,
@@ -22,5 +24,6 @@ module.exports = {
     Project,
     ProjectLaborTeam,
     Salary,
-    SuperviseUser
+    SuperviseUser,
+    SettleFile
 }

@@ -29,6 +29,11 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
             comment: '项目名称'
         },
+        account: {
+            type: DataTypes.STRING(20),
+            allowNull: false,
+            comment: '项目账户'
+        },
         addr: {
             type: DataTypes.STRING(50),
             allowNull: false,

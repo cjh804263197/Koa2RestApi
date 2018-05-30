@@ -1,13 +1,13 @@
 const {APIError} = require('../rest')
 
-const formParse = require('../upload')
+const { imgParse } = require('../upload')
 
 const {formDataParser} = require('../common/util')
 
 const {saveCorp, destoryCorp, getCorp, queryCorp} = require('../service/CorpService')
 
 var fn_post_save = async (ctx, next) => {
-    let obj = await formParse(ctx)
+    let obj = await imgParse(ctx)
     let params = formDataParser(obj)
     console.log(`params=${JSON.stringify(params)}`)
     let corp = await saveCorp(params)
