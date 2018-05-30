@@ -95,7 +95,7 @@ let createSalaryByProLabTeam = async params => {
             standardAttendDay: 0,
             actualAttendDay: 0,
             money: 0,
-            status: '待审核'
+            status: '未审核'
         }
         salarys.push(salary)
     })
@@ -123,8 +123,8 @@ let readReportFileToSalary = async (path) => {
     let results = []
     datas.forEach(data => {
         let fildes = data.split(space)
-        if (parseInt(fildes[7])) {
-            results.push(fildes[6])
+        if (parseInt(fildes[9])) {
+            results.push(fildes[8])
         }
     })
     // 批量更新

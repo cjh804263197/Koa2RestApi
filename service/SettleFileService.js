@@ -64,7 +64,7 @@ let querySettleFile = async params => {
  */
 let querySalarySettleData = async params => {
   let results = []
-    await sequelize.query('SELECT pro.title as `project`,labteam.title as `laborTeam`,pro.account,constructCorp.title,lab.`name`,sala.money,sala.`year`,sala.`month`,sala.id '
+    await sequelize.query('SELECT pro.title as `project`,labteam.title as `laborTeam`,pro.account,constructCorp.title,lab.bankCardNum,lab.idCardNum,lab.`name`,sala.money,sala.`year`,sala.`month`,sala.id '
     + 'FROM salaries AS `sala` '
     + 'LEFT OUTER JOIN projects AS `pro` ON sala.projectId = pro.id '
     + 'LEFT OUTER JOIN corps AS `buildCorp` ON buildCorp.id = pro.buildCorpId AND buildCorp.kind = :kind1 '
@@ -76,7 +76,7 @@ let querySalarySettleData = async params => {
   {raw: true, replacements: {
       kind1: '建设单位', kind2: '施工总承包单位', 
       kind3: '劳务公司', projectId: params['projectId'], 
-      laborTeamId: params['laborTeamId'], year: params['year'], 
+      laborTeamId: params['laborTeamId'], year: params['year'],
       month: params['month'],status: '已审核'
     }
   }).then(res => {
@@ -102,8 +102,8 @@ let createSettleFile = async datas => {
   let chunks = []
   let length = 0
   datas.forEach(data => {
-    let record = data.account + space + data.title + space 
-    + data.name + space + data.money + space + data.year + space 
+    let record = data.account + space + data.title + space + data.idCardNum + space
+    + data.bankCardNum + space + data.name + space + data.money + space + data.year + space 
     + data.month + space + data.id + enter
     let buffer = new Buffer(record, 'utf8')
     length += buffer.length
@@ -123,7 +123,7 @@ let createSettleFile = async datas => {
     console.error(e)
     throw new APIError('create:faile', 'the salary is create faile')
   }
-  return {filename: filename, kind: '结算文件', url: '/static/upload/txt/' + filename}
+  return {filename: filename, kind: '结算文件', url: 'static/upload/txt/' + filename}
 }
 
 
