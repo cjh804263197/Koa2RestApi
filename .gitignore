@@ -5,6 +5,8 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .Ds_Store
+.DS_Store
+package-lock.json
 
 # UploadFiles
 static/upload/
