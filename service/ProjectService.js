@@ -1,4 +1,4 @@
-const {Project, Corp, ProjectLaborTeam, LaborTeam} = require('../model')
+const {Project, Corp, ProjectLaborTeam, LaborTeam, sequelize} = require('../model')
 const {APIError} = require('../rest')
 const {queryConditionParser, queryChildConditionParser} = require('../common/util')
 
@@ -116,11 +116,26 @@ let queryProjectLaborTeam = async params => {
     return result
 }
 
+/**
+ * 项目分类统计
+ * @param {*} params 
+ */
+let projectStatistic = async params => {
+    let results = []
+    await sequelize.query('SELECT `status`,COUNT(*) as `count` FROM projects GROUP BY `status`',
+    {raw: true}).then(res => {
+    console.log(`projectStatistic=${JSON.stringify(res)}`)
+    results = res[0]
+  })
+  return results
+}
+
 module.exports = {
     saveProject,
     destoryProject,
     getProject,
     queryProject,
     saveProjectLaborTeam,
-    queryProjectLaborTeam
+    queryProjectLaborTeam,
+    projectStatistic
 }

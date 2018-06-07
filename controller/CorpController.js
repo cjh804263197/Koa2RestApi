@@ -4,7 +4,7 @@ const { imgParse } = require('../upload')
 
 const {formDataParser} = require('../common/util')
 
-const {saveCorp, destoryCorp, getCorp, queryCorp} = require('../service/CorpService')
+const {saveCorp, destoryCorp, getCorp, queryCorp, corpStatistic} = require('../service/CorpService')
 
 var fn_post_save = async (ctx, next) => {
     let obj = await imgParse(ctx)
@@ -37,11 +37,17 @@ var fn_post_query = async (ctx, next) => {
     ctx.rest(res)
 }
 
+var fn_post_statistic = async (ctx, next) => {
+    let res = await corpStatistic(ctx.request.body)
+    ctx.rest(res)
+}
+
 module.exports = {
     'POST /corp/save': fn_post_save,
     'POST /corp/destory': fn_post_destory,
     'POST /corp/get': fn_post_get,
-    'POST /corp/query': fn_post_query
+    'POST /corp/query': fn_post_query,
+    'POST /corp/statistic': fn_post_statistic
 }
 
   

@@ -1,4 +1,4 @@
-const {Labor, Project, Salary, LaborTeam} = require('../model')
+const {Labor, Project, Salary, LaborTeam, sequelize} = require('../model')
 const {APIError} = require('../rest')
 const {queryConditionParser, queryChildConditionParser} = require('../common/util')
 const fs = require('fs')
@@ -134,11 +134,40 @@ let readReportFileToSalary = async (path) => {
     return affectRows
 }
 
+/**
+ * 工资状态统计
+ * @param {*} params 请求参数
+ */
+let salaryStatistic = async params => {
+    let results = []
+    await sequelize.query('select `status`,COUNT(*) as `count` from salaries as sala '
+    + 'LEFT JOIN laborteams as labteam on labteam.id=sala.laborTeamId '
+    + 'where (:projectId="" OR projectId=:projectId) '
+    + 'AND (:corpId="" OR labteam.corpId=:corpId) '
+    + 'AND sala.`year`=:year AND sala.`month`=:month '
+    + 'GROUP BY `status`',
+  {raw: true, replacements: {
+    //   projectId: params['projectId'],
+    //   corpId: params['corpId'],
+      projectId: '',
+      corpId: '',
+      year: params['year'],
+      month: params['month']
+    }
+  }).then(res => {
+    console.log(`salaryStatistic=${JSON.stringify(res[0])}`)
+    results = res[0]
+  })
+
+  return results
+}
+
 module.exports = {
     saveSalary,
     destorySalary,
     getSalary,
     querySalary,
     createSalaryByProLabTeam,
-    readReportFileToSalary
+    readReportFileToSalary,
+    salaryStatistic
 }

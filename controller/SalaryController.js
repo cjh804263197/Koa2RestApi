@@ -4,7 +4,7 @@ const formParse = require('../upload')
 
 const {formDataParser} = require('../common/util')
 
-const {saveSalary, destorySalary, getSalary, querySalary, createSalaryByProLabTeam} = require('../service/SalaryService')
+const {saveSalary, destorySalary, getSalary, querySalary, createSalaryByProLabTeam, salaryStatistic} = require('../service/SalaryService')
 
 var fn_post_save = async (ctx, next) => {
     let salary = await saveSalary(ctx.request.body)
@@ -34,6 +34,11 @@ var fn_post_query = async (ctx, next) => {
     ctx.rest(res)
 }
 
+var fn_post_statistic = async (ctx, next) => {
+    let res = await salaryStatistic(ctx.request.body)
+    ctx.rest(res)
+}
+
 var fn_post_createSalaryByProLabTeam = async (ctx, next) => {
     let res = await createSalaryByProLabTeam(ctx.request.body)
     if (res) { // 若有proLabTeam,则表示保存成功,返回id
@@ -48,5 +53,6 @@ module.exports = {
     'POST /salary/destory': fn_post_destory,
     'POST /salary/get': fn_post_get,
     'POST /salary/query': fn_post_query,
+    'POST /salary/statistic': fn_post_statistic,
     'POST /salary/createSalaryByProLabTeam': fn_post_createSalaryByProLabTeam
 }

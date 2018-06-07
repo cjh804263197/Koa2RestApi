@@ -4,7 +4,7 @@ const formParse = require('../upload')
 
 const {formDataParser} = require('../common/util')
 
-const {saveProject, destoryProject, getProject, queryProject, saveProjectLaborTeam, getProjectLaborTeam, queryProjectLaborTeam} = require('../service/ProjectService')
+const {saveProject, destoryProject, getProject, queryProject, saveProjectLaborTeam, getProjectLaborTeam, queryProjectLaborTeam, projectStatistic} = require('../service/ProjectService')
 
 var fn_post_save = async (ctx, next) => {
     let project = await saveProject(ctx.request.body)
@@ -56,11 +56,17 @@ var fn_post_teamlabor_query = async (ctx, next) => {
     ctx.rest(res)
 }
 
+var fn_post_statistic = async (ctx, next) => {
+    let res = await projectStatistic(ctx.request.body)
+    ctx.rest(res)
+}
+
 module.exports = {
     'POST /project/save': fn_post_save,
     'POST /project/destory': fn_post_destory,
     'POST /project/get': fn_post_get,
     'POST /project/query': fn_post_query,
+    'POST /project/statistic': fn_post_statistic,
     'POST /project/laborteam/save': fn_post_teamlabor_save,
     'POST /project/laborteam/get': fn_post_teamlabor_get,
     'POST /project/laborteam/query': fn_post_teamlabor_query

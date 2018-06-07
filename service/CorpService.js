@@ -1,4 +1,4 @@
-const {Corp} = require('../model')
+const {Corp, sequelize} = require('../model')
 const {APIError} = require('../rest')
 const {queryConditionParser} = require('../common/util')
 
@@ -55,9 +55,24 @@ let queryCorp = async params => {
     return result
 }
 
+/**
+ * 企业分类状态统计查询
+ * @param {*} params 
+ */
+let corpStatistic = async params => {
+    let results = []
+    await sequelize.query('select kind,`status`,COUNT(*) as `count` from corps GROUP BY kind,`status`',
+    {raw: true}).then(res => {
+    console.log(`corpStatistic=${JSON.stringify(res)}`)
+    results = res[0]
+  })
+  return results
+}
+
 module.exports = {
     saveCorp,
     destoryCorp,
     getCorp,
-    queryCorp
+    queryCorp,
+    corpStatistic
 }
