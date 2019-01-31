@@ -63,15 +63,15 @@ server.use(restify())
 server.use(async (ctx, next) => {
     console.log(`Process ${ctx.request.method} ${ctx.request.url}...`)
     console.log(`Session ${ctx.session.user}`)
-    if (ctx.session.user === undefined && ctx.request.url.indexOf('/login') === -1) {
-        throw new APIError('auth:unauthorized', 'you should to login!')
-    } else {
-        if (ctx.request.method === 'POST' && ctx.request.params === {}) {
-            throw new APIError('param:null', 'param should not null!')
-        } else {
+    // if (ctx.session.user === undefined && ctx.request.url.indexOf('/login') === -1) {
+    //     throw new APIError('auth:unauthorized', 'you should to login!')
+    // } else {
+        // if (ctx.request.method === 'POST' && ctx.request.params === {}) {
+        //     throw new APIError('param:null', 'param should not null!')
+        // } else {
             await next()
-        }
-    }
+        // }
+    // }
 })
 
 // 使用自动扫描controller,自动装配路由 默认在路由根路径加上/api
